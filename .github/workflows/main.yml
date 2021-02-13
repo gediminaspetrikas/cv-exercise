@@ -42,6 +42,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Configure environment name
+        id: env-name
+        env:
+          REPO: ${{ github.repository }}
+        run: |
+          ENVIRONMENT=`echo $REPO | tr "/" "-"`
+          echo "Environment name: $ENVIRONMENT"
+          echo "::set-output name=environment::$ENVIRONMENT"
       - name: Deploy to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
@@ -49,14 +57,7 @@ jobs:
           template: CVnodejs.yaml
 #           parameter-overrides: "MyParam1=myValue,MyParam2=${{ secrets.MY_SECRET_VALUE }}"
 
-#     - name: Configure environment name
-#       id: env-name
-#       env:
-#         REPO: ${{ github.repository }}
-#       run: |
-#         ENVIRONMENT=`echo $REPO | tr "/" "-"`
-#         echo "Environment name: $ENVIRONMENT"
-#         echo "::set-output name=environment::$ENVIRONMENT"
+
 
      
   # This workflow contains a single job called "build"
