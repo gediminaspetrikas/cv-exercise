@@ -53,6 +53,7 @@ jobs:
       with:
         name: CVnodejs
         template: CVnodejs.yaml
+        capabilities: 'CAPABILITY_IAM'
 #           parameter-overrides: "MyParam1=myValue,MyParam2=${{ secrets.MY_SECRET_VALUE }}"       
 
   # This workflow contains a single job called "build"
