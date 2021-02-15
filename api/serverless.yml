@@ -13,4 +13,4 @@ functions:
       - http:
           method: get
           path: time
-    handler: api/handler
+    handler: handler
