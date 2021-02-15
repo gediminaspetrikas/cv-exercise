@@ -16,12 +16,11 @@
     "@types/aws-lambda": "^8.10.17",
     "@types/node": "^10.14.22",
     "eslint": "^6.6.0",
-    "serverless-webpack": "^5.2.0",
+    "serverless-plugin-typescript": "^1.1.9",
     "ts-loader": "^5.3.3",
     "tslint": "^5.20.0",
     "tslint-config-airbnb": "^5.11.2",
-    "typescript": "^3.2.4",
-    "webpack": "^4.29.0"
+    "typescript": "^3.9.9"
   },
   "author": "",
   "license": "ISC"

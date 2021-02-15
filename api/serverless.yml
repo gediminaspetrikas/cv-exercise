@@ -1,0 +1,16 @@
+service: cv-exercise-api
+
+provider:
+  name: aws
+
+plugins:
+  - serverless-plugin-typescript
+
+functions:
+  time:
+    runtime: nodejs15.x
+    events:
+      - http:
+          method: get
+          path: time
+    handler: api/handler
