@@ -2,6 +2,7 @@ service: cv-exercise-api
 
 provider:
   name: aws
+  region: eu-west-2
 
 plugins:
   - serverless-plugin-typescript
