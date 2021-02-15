@@ -9,7 +9,7 @@ plugins:
 
 functions:
   time:
-    runtime: nodejs15.x
+    runtime: nodejs12.x
     events:
       - http:
           method: get
