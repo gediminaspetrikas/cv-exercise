@@ -19,9 +19,9 @@ export const create: Handler = async () => {
   };
 
   const result = await dynamoDb.put(params).promise();
-  console.log(result);
+  console.log("res", result);
   return {
     statusCode: 200,
-    body: JSON.stringify(result),
+    body: JSON.stringify("test"),
   };
 };
