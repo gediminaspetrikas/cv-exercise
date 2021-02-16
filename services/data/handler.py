@@ -1,8 +1,8 @@
-def hello(event, context):
-    return {
-        "statusCode": 200,
-        "body": "<html><body><p>Hello!</p></body></html>",
-        "headers": {
-            "Content-Type": "text/html"
-        }
-    }
+from __future__ import print_function
+
+
+def process_data(event, context):
+    for record in event['Records']:
+        print("test")
+        payload = record["body"]
+        print(str(payload))

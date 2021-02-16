@@ -9,16 +9,7 @@ provider:
   region: eu-west-2
   environment:
     DYNAMODB_JOBS_TABLE: cv-exercise-resources-${opt:stage, self:provider.stage}-jobs
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_JOBS_TABLE}"
+    SQS_QUEUE_JOBS: cv-exercise-resources--${opt:stage, self:provider.stage}-jobs
 
 functions:
   task:
@@ -28,3 +19,13 @@ functions:
           method: post
           path: task
     handler: handler.create
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+          - dynamodb:GetItem
+        Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_JOBS_TABLE}
+      - Effect: Allow
+        Action:
+          - sqs:SendMessage
+        Resource: arn:aws:sqs:${opt:region, self:provider.region}:*:{self:provider.environment.SQS_QUEUE_JOBS}

@@ -4,14 +4,23 @@ provider:
   name: aws
   region: eu-west-2
   environment:
-    DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+    DYNAMODB_JOBS_TABLE: cv-exercise-resources-${opt:stage, self:provider.stage}-jobs
+    SQS_QUEUE_JOBS: cv-exercise-resources--${opt:stage, self:provider.stage}-jobs
       
 functions:
   hello:
     runtime: python3.6
+    reservedConcurrency: 1
+    handler: handler.process_data
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+          - dynamodb:GetItem
+        Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_JOBS_TABLE}
+      - Effect: Allow
+        Action:
+          - sqs:ReceiveMessage
+        Resource: arn:aws:sqs:${opt:region, self:provider.region}:*:{self:provider.environment.SQS_QUEUE_JOBS}
     events:
-      - http:
-          method: get
-          path: greet
-    handler: handler.hello
-    
+      - sqs: arn:aws:sqs:${opt:region, self:provider.region}:*:{self:provider.environment.SQS_QUEUE_JOBS}

@@ -5,20 +5,11 @@ provider:
   region: eu-west-2
   environment:
     DYNAMODB_JOBS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-jobs
-  # iamRoleStatements:
-  #   - Effect: Allow
-  #     Action:
-  #       - dynamodb:Query
-  #       - dynamodb:Scan
-  #       - dynamodb:GetItem
-  #       - dynamodb:PutItem
-  #       - dynamodb:UpdateItem
-  #       - dynamodb:DeleteItem
-  #     Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_JOBS_TABLE}"
+    SQS_QUEUE_JOBS: ${self:service}-${opt:stage, self:provider.stage}-jobs
 
 resources:
   Resources:
-    TodosDynamoDbTable:
+    TasksDynamoTable:
       Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
       Properties:
@@ -33,4 +24,8 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: ${self:provider.environment.DYNAMODB_JOBS_TABLE}        
+        TableName: ${self:provider.environment.DYNAMODB_JOBS_TABLE}
+    TaskQueue:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: ${self:provider.environment.SQS_QUEUE_JOBS}

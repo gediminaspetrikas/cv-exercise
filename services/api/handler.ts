@@ -1,27 +1,61 @@
 import { Handler } from "aws-lambda";
-import { DynamoDB } from "aws-sdk";
+import { DynamoDB, SQS } from "aws-sdk";
 
 import * as uuid from "uuid";
 
 const dynamoDb = new DynamoDB.DocumentClient();
+const sqs = new SQS();
+const MESSAGE_GROUP_ID = "Jobs";
 
 export const create: Handler = async () => {
-  const timestamp = new Date().getTime();
-
-  console.log(process.env);
-  const params: DynamoDB.DocumentClient.PutItemInput = {
-    TableName: process.env.DYNAMODB_JOBS_TABLE,
-    Item: {
-      id: uuid.v1(),
-      createdAt: timestamp,
-      updatedAt: timestamp,
+  const jobId = uuid.v1();
+  const params: SQS.SendMessageRequest = {
+    MessageAttributes: {
+      jobId: {
+        DataType: "String",
+        StringValue: jobId,
+      },
     },
+    MessageBody: JSON.stringify(jobId),
+    MessageDeduplicationId: jobId,
+    MessageGroupId: MESSAGE_GROUP_ID,
+    QueueUrl: process.env.SQS_QUEUE_JOBS,
   };
 
-  const result = await dynamoDb.put(params).promise();
-  console.log("res", result);
+  try {
+    await sqs.sendMessage(params).promise();
+  } catch (error) {
+    console.error("Push to queue failed", error);
+
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        errorMessage: "Internal server failure",
+      }),
+    };
+  }
+
   return {
-    statusCode: 200,
-    body: JSON.stringify("test"),
+    statusCode: 202,
+    body: JSON.stringify({ jobId }),
   };
+};
+
+export const get: Handler = async () => {
+  // const timestamp = new Date().getTime();
+  // console.log(process.env);
+  // const params: DynamoDB.DocumentClient.PutItemInput = {
+  //   TableName: process.env.DYNAMODB_JOBS_TABLE,
+  //   Item: {
+  //     id: uuid.v1(),
+  //     createdAt: timestamp,
+  //     updatedAt: timestamp,
+  //   },
+  // };
+  // const result = await dynamoDb.put(params).promise();
+  // console.log("res", result);
+  // return {
+  //   statusCode: 200,
+  //   body: JSON.stringify(result),
+  // };
 };
