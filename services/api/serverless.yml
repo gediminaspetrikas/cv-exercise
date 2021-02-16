@@ -8,7 +8,7 @@ provider:
   name: aws
   region: eu-west-2
   environment:
-    DYNAMODB_JOBS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-jobs
+    DYNAMODB_JOBS_TABLE: cv-exercise-resources-${opt:stage, self:provider.stage}-jobs
   iamRoleStatements:
     - Effect: Allow
       Action:
