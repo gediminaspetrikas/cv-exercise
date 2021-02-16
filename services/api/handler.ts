@@ -10,7 +10,7 @@ export const create: Handler = async () => {
 
   console.log(process.env);
   const params: DynamoDB.DocumentClient.PutItemInput = {
-    TableName: process.env.DYNAMODB_TABLE,
+    TableName: process.env.DYNAMODB_JOBS_TABLE,
     Item: {
       id: uuid.v1(),
       createdAt: timestamp,
