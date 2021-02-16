@@ -1,0 +1,20 @@
+service: cv-exercise-api
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+
+provider:
+  name: aws
+  region: eu-west-2
+  environment:
+    DYNAMODB_JOBS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-jobs
+
+functions:
+  task:
+    runtime: nodejs12.x
+    events:
+      - http:
+          method: post
+          path: task
+    handler: handler.create
