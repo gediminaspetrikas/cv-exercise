@@ -9,7 +9,7 @@ provider:
   region: eu-west-2
   environment:
     DYNAMODB_JOBS_TABLE: cv-exercise-resources-${opt:stage, self:provider.stage}-jobs
-    SQS_QUEUE_JOBS: cv-exercise-resources--${opt:stage, self:provider.stage}-jobs
+    SQS_QUEUE_JOBS: cv-exercise-resources-${opt:stage, self:provider.stage}-jobs
 
 functions:
   task:
