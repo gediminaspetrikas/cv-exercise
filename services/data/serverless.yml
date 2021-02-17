@@ -8,7 +8,7 @@ provider:
     SQS_QUEUE_JOBS: cv-exercise-resources--${opt:stage, self:provider.stage}-jobs
       
 functions:
-  hello:
+  process_data:
     runtime: python3.6
     reservedConcurrency: 1
     handler: handler.process_data
