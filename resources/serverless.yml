@@ -29,4 +29,4 @@ resources:
       Type: "AWS::SQS::Queue"
       Properties:
         QueueName: ${self:provider.environment.SQS_QUEUE_JOBS}
-        FifoQueue: true
+        
