@@ -1,13 +1,21 @@
-import { Handler } from "aws-lambda";
+import { Handler, Context } from "aws-lambda";
 import { DynamoDB, SQS } from "aws-sdk";
 
 import * as uuid from "uuid";
 
-const dynamoDb = new DynamoDB.DocumentClient();
+// const dynamoDb = new DynamoDB.DocumentClient();
 const sqs = new SQS();
 const MESSAGE_GROUP_ID = "Jobs";
 
-export const create: Handler = async () => {
+const getQueueUrl = (context: Context): string => {
+  const region = context.invokedFunctionArn.split(":")[3];
+  const accountId = context.invokedFunctionArn.split(":")[4];
+  const queueName: string = process.env.SQS_QUEUE_JOBS;
+
+  return `https://sqs.${region}.amazonaws.com/${accountId}/${queueName}`;
+};
+
+export const create: Handler = async (event, context) => {
   const jobId = uuid.v1();
   const params: SQS.SendMessageRequest = {
     MessageAttributes: {
@@ -19,7 +27,7 @@ export const create: Handler = async () => {
     MessageBody: JSON.stringify(jobId),
     MessageDeduplicationId: jobId,
     MessageGroupId: MESSAGE_GROUP_ID,
-    QueueUrl: process.env.SQS_QUEUE_JOBS,
+    QueueUrl: getQueueUrl(context),
   };
 
   try {
