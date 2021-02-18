@@ -18,7 +18,7 @@ provider:
     - Effect: Allow
       Action:
         - sqs:SendMessage
-      Resource: arn:aws:sqs:${opt:region, self:provider.region}:*:{self:provider.environment.SQS_QUEUE_JOBS}
+      Resource: arn:aws:sqs:eu-west-2:041087672119:cv-exercise-resources-dev-jobs # hack https://github.com/aws/serverless-application-model/issues/1699
 
 functions:
   task:
