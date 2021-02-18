@@ -18,9 +18,9 @@ provider:
       Resource: arn:aws:sqs:${opt:region, self:provider.region}:*:{self:provider.environment.SQS_QUEUE_JOBS}    
   
 functions:
-  process_data:
+  create_uuid:
     runtime: python3.6
     reservedConcurrency: 1
-    handler: handler.process_data
+    handler: handler.create_uuid
     events:
       - sqs: arn:aws:sqs:eu-west-2:041087672119:cv-exercise-resources-dev-jobs # hack https://github.com/aws/serverless-application-model/issues/1699

@@ -3,9 +3,8 @@ import { DynamoDB, SQS } from "aws-sdk";
 
 import * as uuid from "uuid";
 
-// const dynamoDb = new DynamoDB.DocumentClient();
+const dynamoDb = new DynamoDB.DocumentClient();
 const sqs = new SQS();
-const MESSAGE_GROUP_ID = "Jobs";
 
 const getQueueUrl = (context: Context): string => {
   const region = context.invokedFunctionArn.split(":")[3];
@@ -17,7 +16,6 @@ const getQueueUrl = (context: Context): string => {
 
 export const create: Handler = async (event, context) => {
   const jobId = uuid.v1();
-  console.log("queue", getQueueUrl(context));
   const params: SQS.SendMessageRequest = {
     MessageAttributes: {
       jobId: {
@@ -31,6 +29,11 @@ export const create: Handler = async (event, context) => {
 
   try {
     await sqs.sendMessage(params).promise();
+
+    return {
+      statusCode: 202,
+      body: JSON.stringify({ jobId }),
+    };
   } catch (error) {
     console.error("Push to queue failed", error);
 
@@ -38,32 +41,42 @@ export const create: Handler = async (event, context) => {
       statusCode: 500,
       body: JSON.stringify({
         errorMessage: "Internal server failure",
-        queue: getQueueUrl(context),
       }),
     };
   }
-
-  return {
-    statusCode: 202,
-    body: JSON.stringify({ jobId }),
-  };
 };
 
-export const get: Handler = async () => {
-  // const timestamp = new Date().getTime();
-  // console.log(process.env);
-  // const params: DynamoDB.DocumentClient.PutItemInput = {
-  //   TableName: process.env.DYNAMODB_JOBS_TABLE,
-  //   Item: {
-  //     id: uuid.v1(),
-  //     createdAt: timestamp,
-  //     updatedAt: timestamp,
-  //   },
-  // };
-  // const result = await dynamoDb.put(params).promise();
-  // console.log("res", result);
-  // return {
-  //   statusCode: 200,
-  //   body: JSON.stringify(result),
-  // };
+export const get: Handler = async (event) => {
+  const jobId = event.pathParameters.jobId;
+  if (!jobId) {
+    return {
+      statusCode: 400,
+      errorMessage: "Missing jobId",
+    };
+  }
+
+  const params: DynamoDB.DocumentClient.GetItemInput = {
+    TableName: process.env.DYNAMODB_JOBS_TABLE,
+    Key: {
+      jobId,
+    },
+  };
+  try {
+    const result = await dynamoDb.get(params).promise();
+    console.log("res", result);
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result),
+    };
+  } catch (error) {
+    console.error("Read from database failed", error);
+
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        errorMessage: "Internal server failure",
+      }),
+    };
+  }
 };

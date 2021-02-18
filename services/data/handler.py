@@ -1,8 +1,29 @@
 from __future__ import print_function
+import json
+import logging
+import os
+import time
+import uuid
+
+import boto3
+
+dynamodb = boto3.resource('dynamodb')
 
 
-def process_data(event, context):
+def create_uuid(event, context):
     for record in event['Records']:
-        print("test")
-        payload = record["body"]
-        print(str(payload))
+        time.sleep(3)
+
+        jobId = record["body"]
+        print(str(jobId))
+        timestamp = str(time.time())
+        table = dynamodb.Table(os.environ['DYNAMODB_JOBS_TABLE'])
+        item = {
+            'id': str(uuid.uuid1()),
+            'jobId': jobId,
+            'text': str(uuid.uuid1()),
+            'createdAt': timestamp,
+            'updatedAt': timestamp,
+        }
+
+        table.put_item(Item=item)
