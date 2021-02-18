@@ -26,8 +26,6 @@ export const create: Handler = async (event, context) => {
       },
     },
     MessageBody: JSON.stringify(jobId),
-    MessageDeduplicationId: jobId,
-    MessageGroupId: MESSAGE_GROUP_ID,
     QueueUrl: getQueueUrl(context),
   };
 
