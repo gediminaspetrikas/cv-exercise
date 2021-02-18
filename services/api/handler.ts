@@ -17,6 +17,7 @@ const getQueueUrl = (context: Context): string => {
 
 export const create: Handler = async (event, context) => {
   const jobId = uuid.v1();
+  console.log("queue", getQueueUrl(context));
   const params: SQS.SendMessageRequest = {
     MessageAttributes: {
       jobId: {
@@ -39,6 +40,7 @@ export const create: Handler = async (event, context) => {
       statusCode: 500,
       body: JSON.stringify({
         errorMessage: "Internal server failure",
+        queue: getQueueUrl(context),
       }),
     };
   }
