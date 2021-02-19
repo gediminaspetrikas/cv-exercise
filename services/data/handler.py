@@ -19,7 +19,7 @@ def create_uuid(event, context):
         timestamp = str(time.time())
         table = dynamodb.Table(os.environ['DYNAMODB_JOBS_TABLE'])
         item = {
-            'id': jobId,
+            'id': uuid.UUID(jobId),
             'text': str(uuid.uuid1()),
             'createdAt': timestamp,
             'updatedAt': timestamp,
