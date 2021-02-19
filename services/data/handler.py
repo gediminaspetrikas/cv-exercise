@@ -12,14 +12,14 @@ dynamodb = boto3.resource('dynamodb')
 
 def create_uuid(event, context):
     for record in event['Records']:
-        time.sleep(3)
+        # process data
+        time.sleep(1)
 
-        jobId = record["body"]
-        print(str(jobId))
+        jobId = record["messageAttributes"]['jobId']['stringValue']
         timestamp = str(time.time())
         table = dynamodb.Table(os.environ['DYNAMODB_JOBS_TABLE'])
         item = {
-            'id': uuid.UUID(str(jobId)),
+            'id': str(uuid.UUID(jobId)),
             'text': str(uuid.uuid1()),
             'createdAt': timestamp,
             'updatedAt': timestamp,

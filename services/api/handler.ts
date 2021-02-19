@@ -61,13 +61,17 @@ export const get: Handler = async (event) => {
       id,
     },
   };
+
   try {
-    const result = await dynamoDb.get(params).promise();
-    console.log("res", result);
+    const { Item: result } = await dynamoDb.get(params).promise();
+    const mappedResult = {
+      jobId: result.id,
+      text: result.text,
+    };
 
     return {
       statusCode: 200,
-      body: JSON.stringify(result),
+      body: JSON.stringify(mappedResult),
     };
   } catch (error) {
     console.error("Read from database failed", error);
