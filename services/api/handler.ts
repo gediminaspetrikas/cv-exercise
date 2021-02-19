@@ -47,18 +47,18 @@ export const create: Handler = async (event, context) => {
 };
 
 export const get: Handler = async (event) => {
-  const jobId = event.pathParameters.jobId;
-  if (!jobId) {
+  const id = event.pathParameters.id;
+  if (!id && uuid.validate(id)) {
     return {
       statusCode: 400,
-      errorMessage: "Missing jobId",
+      errorMessage: "Missing or wrong id path parameter",
     };
   }
 
   const params: DynamoDB.DocumentClient.GetItemInput = {
     TableName: process.env.DYNAMODB_JOBS_TABLE,
     Key: {
-      jobId,
+      id,
     },
   };
   try {

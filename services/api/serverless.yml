@@ -27,11 +27,11 @@ functions:
     events:
       - http:
           method: post
-          path: task
+          path: job
   get:
     handler: handler.get
     events:
       - http:
           method: get
-          path: task/{jobId}
+          path: job/{id}
   
