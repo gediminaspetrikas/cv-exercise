@@ -39,7 +39,7 @@ export const create: Handler = async (event, context) => {
     return {
       statusCode: 500,
       body: JSON.stringify({
-        errorMessage: "Internal server failure",
+        message: "Internal server failure",
       }),
     };
   }

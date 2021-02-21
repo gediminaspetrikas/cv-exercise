@@ -11,7 +11,7 @@ export const get: Handler = async (event) => {
   if (!id || uuid.validate(id)) {
     return {
       statusCode: 400,
-      errorMessage: "Missing or wrong id path parameter",
+      message: "Missing or wrong id path parameter",
     };
   }
 
@@ -23,12 +23,19 @@ export const get: Handler = async (event) => {
   };
 
   try {
-    const { Item: result } = await dynamoDb.get(params).promise();
-    console.log("item: ", result);
+    const { Item: jobItem } = await dynamoDb.get(params).promise();
+    console.log("item: ", jobItem);
+
+    if (!jobItem) {
+      return {
+        statusCode: 404,
+        message: "Resource not found",
+      };
+    }
 
     const mappedResult = {
-      jobId: result.id,
-      text: result.text,
+      jobId: jobItem.id,
+      text: jobItem.text,
     };
 
     return {
@@ -41,7 +48,7 @@ export const get: Handler = async (event) => {
     return {
       statusCode: 500,
       body: JSON.stringify({
-        errorMessage: "Internal server failure",
+        message: "Internal server failure",
       }),
     };
   }
