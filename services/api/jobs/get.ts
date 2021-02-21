@@ -11,7 +11,9 @@ export const get: Handler = async (event) => {
   if (!id || !uuid.validate(id)) {
     return {
       statusCode: 400,
-      message: "Missing or wrong id path parameter",
+      message: JSON.stringify({
+        message: "Missing or wrong id path parameter",
+      }),
     };
   }
 
