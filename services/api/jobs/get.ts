@@ -29,7 +29,9 @@ export const get: Handler = async (event) => {
     if (!jobItem) {
       return {
         statusCode: 404,
-        message: "Resource not found",
+        body: JSON.stringify({
+          message: "Resource not found",
+        }),
       };
     }
 
