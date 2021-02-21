@@ -1,4 +1,4 @@
-service: cv-exercise-api
+service: cv-exercise-api-job
 
 plugins:
   - serverless-plugin-typescript
