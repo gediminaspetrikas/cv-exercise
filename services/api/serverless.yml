@@ -23,13 +23,13 @@ provider:
 
 functions:
   create:
-    handler: handler.create
+    handler: job/handler.create
     events:
       - http:
           method: post
           path: job
   get:
-    handler: handler.get
+    handler: job/handler.get
     events:
       - http:
           method: get
