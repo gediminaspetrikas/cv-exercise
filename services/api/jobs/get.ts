@@ -7,7 +7,7 @@ const dynamoDb = new DynamoDB.DocumentClient();
 
 export const get: Handler = async (event) => {
   const id = event.pathParameters.id;
-  if (!id && uuid.validate(id)) {
+  if (!id || uuid.validate(id)) {
     return {
       statusCode: 400,
       errorMessage: "Missing or wrong id path parameter",
@@ -23,6 +23,8 @@ export const get: Handler = async (event) => {
 
   try {
     const { Item: result } = await dynamoDb.get(params).promise();
+    console.log(result);
+
     const mappedResult = {
       jobId: result.id,
       text: result.text,
