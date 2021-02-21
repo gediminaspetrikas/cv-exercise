@@ -1,0 +1,28 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "tslint -p tsconfig.json -c tslint.json"
+  },
+  "dependencies": {
+    "aws-lambda": "^0.1.2",
+    "aws-sdk": "^2.553.0",
+    "source-map-support": "^0.5.10",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.17",
+    "@types/node": "^10.14.22",
+    "@types/uuid": "^8.3.0",
+    "eslint": "^6.6.0",
+    "serverless-plugin-typescript": "^1.1.9",
+    "ts-loader": "^5.3.3",
+    "tslint-config-airbnb": "^5.11.2",
+    "typescript": "^3.9.9"
+  },
+  "author": "",
+  "license": "ISC"
+}
