@@ -60,5 +60,5 @@ Related project code: https://github.com/gediminaspetrikas/cv-exercise/blob/mast
 
 Reference issue: https://github.com/aws/serverless-application-model/issues/1699
 
-### serverless configuration templating fails for SQS IAM statements
+### Serverless configuration templating fails for SQS IAM statements
 For some reason SQS IAM policy's resource template is not being transformed correctly, causing templating keywords pushed to IAM Policy statement. Does not occur with DynamoDB resources. Can potentially be related to having an `accountId` starting with a `0`.
