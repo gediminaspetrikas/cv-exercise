@@ -7,7 +7,6 @@ const dynamoDb = new DynamoDB.DocumentClient();
 
 export const get: Handler = async (event) => {
   const id = event.pathParameters.id;
-  console.log("ID: ", id);
   if (!id || !uuid.validate(id)) {
     return {
       statusCode: 400,
@@ -26,7 +25,6 @@ export const get: Handler = async (event) => {
 
   try {
     const { Item: jobItem } = await dynamoDb.get(params).promise();
-    console.log("item: ", jobItem);
 
     if (!jobItem) {
       return {
